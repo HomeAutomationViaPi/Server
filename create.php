@@ -6,21 +6,31 @@ require(ROOT_PATH.'includes/functions.php');
 
 session_start();
 
-$_SESSION['UserIP'] = $_SERVER['REMOTE_ADDR'];
+if (isset($_POST[PiID])){
 
-PiIP();
+	$_SESSION['UserIP'] = $_SERVER['REMOTE_ADDR'];
+	$_SESSION['PiID'] = $_POST[PiID];
 
-if ($_SESSION['PiFound']){
- 	include(ROOT_PATH.'includes/page_header.php');
- 	include(ROOT_PATH.'content/setup_loginform.html');
- 	include(ROOT_PATH.'includes/page_footer.php');
+	PiIP();
+
+	if ($_SESSION['PiFound']){
+ 		include(ROOT_PATH.'includes/page_header.php');
+ 		include(ROOT_PATH.'content/setup_loginform.html');
+ 		include(ROOT_PATH.'includes/page_footer.php');
 	
+	}else{
+ 		include(ROOT_PATH.'includes/page_header.php');
+ 		include(ROOT_PATH.'content/PleaseResetPi.html');
+ 		include(ROOT_PATH.'includes/page_footer.php');
+	}
 }else{
- 	include(ROOT_PATH.'includes/page_header.php');
- 	include(ROOT_PATH.'content/PleaseResetPi.html');
- 	include(ROOT_PATH.'includes/page_footer.php');
-}
 
+ 	include(ROOT_PATH.'includes/page_header.php');
+ 	include(ROOT_PATH.'content/getPiID.html');	
+	include(ROOT_PATH.'includes/page_footer.php');
+	
+
+}
   	
 
 ?>

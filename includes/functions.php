@@ -43,11 +43,12 @@ function PiIP() {
       include(ROOT_PATH.'global.php');
 
       $UserIP = $_SESSION['UserIP'];
+      $PiID = $_SESSION['PiID'];
 
       if ($debug){echo "$db_host,$db_user,$db_password<br>UserIp=$UserIP";}
       mysql_connect($db_host,$db_user,$db_password);
       @mysql_select_db($db_name) or die( "Unable to select database");
-      $query = "select IP from NewPi where IP='$UserIP'";
+      $query = "select IP from NewPi where IP='$UserIP' AND ID='$PiID'";
       $result = mysql_query($query);
       if ($debug){echo "<br>Result : $result";}
       if(mysql_num_rows($result) == 1){
