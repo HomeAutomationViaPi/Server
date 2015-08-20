@@ -23,11 +23,13 @@ function auth() {
       if ($debug){echo "$db_host,$db_user,$db_password<br>username=$username<br>password=$password";}
       mysql_connect($db_host,$db_user,$db_password);
       @mysql_select_db($db_name) or die( "Unable to select database");
-      $query = "select * from user where name='$username' and password='$password'";
+      $query = "select userid from user where name='$username' and password='$password'";
       $result = mysql_query($query);
+      $row = mysql_fetch_row($result);
       if ($debug){echo "Result : $result";}
       if(mysql_num_rows($result) == 1){
         $_SESSION['authed'] = true;
+	$_SESSION['userid'] = $row[0];
 	$_SESSION[‘csrfToken’] = base64_encode(openssl_random_pseudo_bytes(32));
 
       } else {
