@@ -34,7 +34,13 @@ include(ROOT_PATH.'includes/page_header.php');
   		echo "<td>" . $row['mac'] . "</td>" ;
   		echo "<td>" . $row['devicename'] . "</td>" ;
   		echo "<td>" . $row['openports'] . "</td>" ;
-  		echo "</tr>";
+		if (strpos($row['openports'],',80,') !== false){
+			echo '<td><a href="pulldata.php?target=' . $row['ip'] . '&proto=http">HTTP</a>   ';
+		}
+		if (strpos($row['openports'],',443,') !== false){
+			echo '<td><a href="pulldata.php?target=' . $row['ip'] . '&proto=https">HTTPs</a>  ';
+		}
+  		echo "</td></tr>";
 	}
 	echo "</table>";
         mysql_close();

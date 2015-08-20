@@ -22,7 +22,7 @@ if ($valid){
 		if ($debug){echo "$db_host,$db_user,$db_password";}
                 mysql_connect($db_host,$db_user,$db_password);
                 @mysql_select_db($db_name) or die( "Unable to select database");
-                $query = "insert into networks (PiID, PiIP, interface, cidr, brdc, LastPubIP) VALUES ('$id', '$ip', '$inter', '$cidr', '$brdc', '$sourceIP')ON DUPLICATE KEY UPDATE PiIP='$ip', interface='$inter', cidr='$cidr', brdc='$brdc', LastPubIP='$sourceIP'";
+                $query = "insert into networks (PiID, PiIP, interface, cidr, brdc, vpnIP) VALUES ('$id', '$ip', '$inter', '$cidr', '$brdc', '$sourceIP')ON DUPLICATE KEY UPDATE PiIP='$ip', interface='$inter', cidr='$cidr', brdc='$brdc', vpnIP='$sourceIP'";
                 $result = mysql_query($query);
                 if ($debug){echo "<br>Result : $result";}
                 mysql_close();	
