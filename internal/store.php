@@ -57,6 +57,36 @@ if ($valid){
 	
 		}
 	}
+
+        if ($_POST[source]=="fing"){
+                foreach(preg_split("/((\r?\n)|(\r\n?))/", $_POST[data]) as $line){
+
+                        if (strpos($line,'Host is up') !== false) {
+                                if (isset($ip2)){
+                                        $ports=implode(",", $ports);
+                                        #if ($debug){echo "($ip2) ,$ports";}
+                                        #if ($debug){echo "$db_host,$db_user,$db_password";}
+                                        mysql_connect($db_host,$db_user,$db_password);
+                                        @mysql_select_db($db_name) or die( "Unable to select database");
+                                        $query = "insert into devices (PiID, ip, openports) VALUES ('$id', '$ip2', '$ports')ON DUPLICATE KEY UPDATE openports='$ports'";
+                                        $result = mysql_query($query);
+                                        if ($debug){echo "<br>Result : $result";}
+                                        mysql_close();
+
+                                }
+                                $pieces = explode(":", $line);
+                                $ip2=$pieces[2];
+				if ($debug){echo "$ip2";}
+                                $ports='';
+
+                        }
+                        if (strpos($line,'open') !== false) {
+                                $pieces = explode("/", $line);
+                                $ports[]=$pieces[0];
+                        }
+
+                }
+        }
 	if ($_POST[source]=="nbt"){
 		foreach(preg_split("/((\r?\n)|(\r\n?))/", $_POST[data]) as $line){
 			$pieces = explode(",", $line);

@@ -35,7 +35,8 @@ include(ROOT_PATH.'includes/page_header.php');
   		echo "<td>" . $row['devicename'] . "</td>" ;
   		echo "<td>" . $row['openports'] . "</td>" ;
 		if (strpos($row['openports'],',80,') !== false){
-			echo '<td><a href="pulldata.php?target=' . $row['ip'] . '&proto=http">HTTP</a>   ';
+			#echo '<td><a href="pulldata.php?target=' . $row['ip'] . '&proto=http">HTTP</a>   ';
+			echo '<td><a href="php-proxy/index.php?url=' . $row['ip'] . '">HTTP</a>   ';
 		}
 		if (strpos($row['openports'],',443,') !== false){
 			echo '<td><a href="pulldata.php?target=' . $row['ip'] . '&proto=https">HTTPs</a>  ';

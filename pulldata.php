@@ -25,6 +25,9 @@ if ($_SESSION['authed'] != true){
         	if ($debug){echo "<br>Result : $row[0]";}
         	mysql_close();
 
+
+
+
 		$url = "http://" .$row[0]. "/puller.php?target=" . $target . "&proto=" . $proto;
 		if ($debug){echo $url;}
 		$str = file_get_contents($url);
