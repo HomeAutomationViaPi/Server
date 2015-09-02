@@ -29,14 +29,33 @@ if ($valid){
 
 	}
 
+        if ($_POST[source]=="nslookup"){
+                foreach(explode(":", $_POST[data]) as $line){
+                        $pieces = explode(",", $line);
+			echo "line=$line   ";
+                        $ip3=$pieces[0];
+                        $name=$pieces[1];
+                        if ($debug){echo "$ip,$name";}
+			if (isset($name)){
+                    	    	mysql_connect($db_host,$db_user,$db_password);
+                       	 	@mysql_select_db($db_name) or die( "Unable to select database");
+                        	$query = "insert into devices (PiID, ip, devicename) VALUES ('$id', '$ip3', '$name')ON DUPLICATE KEY UPDATE devicename='$name'";
+                        	$result = mysql_query($query);
+                        	if ($debug){echo "<br>Result : $result";}
+                        	mysql_close();
+			}
+
+                }
+        }
+
+
+
 
 	if ($_POST[source]=="nmap"){
 		foreach(preg_split("/((\r?\n)|(\r\n?))/", $_POST[data]) as $line){
 			if (strpos($line,'report') !== false) {	
 				if (isset($ip2)){
 					$ports=implode(",", $ports);
-					#if ($debug){echo "($ip2) ,$ports";}
-					#if ($debug){echo "$db_host,$db_user,$db_password";}
                 			mysql_connect($db_host,$db_user,$db_password);
            				@mysql_select_db($db_name) or die( "Unable to select database");
                 			$query = "insert into devices (PiID, ip, openports) VALUES ('$id', '$ip2', '$ports')ON DUPLICATE KEY UPDATE openports='$ports'";
@@ -60,32 +79,28 @@ if ($valid){
 
         if ($_POST[source]=="fing"){
                 foreach(preg_split("/((\r?\n)|(\r\n?))/", $_POST[data]) as $line){
-
+		
                         if (strpos($line,'Host is up') !== false) {
-                                if (isset($ip2)){
-                                        $ports=implode(",", $ports);
-                                        #if ($debug){echo "($ip2) ,$ports";}
-                                        #if ($debug){echo "$db_host,$db_user,$db_password";}
-                                        mysql_connect($db_host,$db_user,$db_password);
-                                        @mysql_select_db($db_name) or die( "Unable to select database");
-                                        $query = "insert into devices (PiID, ip, openports) VALUES ('$id', '$ip2', '$ports')ON DUPLICATE KEY UPDATE openports='$ports'";
-                                        $result = mysql_query($query);
-                                        if ($debug){echo "<br>Result : $result";}
-                                        mysql_close();
-
-                                }
-                                $pieces = explode(":", $line);
-                                $ip2=$pieces[2];
-				if ($debug){echo "$ip2";}
-                                $ports='';
+				$pieces=preg_split('/\s+/', $line);
+                                $ip6=$pieces[5];
 
                         }
-                        if (strpos($line,'open') !== false) {
-                                $pieces = explode("/", $line);
-                                $ports[]=$pieces[0];
-                        }
+				
+                        if (strpos($line,'Hostname') !== false) {
+				$pieces=preg_split('/\s+/', $line);
+				$part = explode(".", $pieces[2]);
+                                $name=$part[0];
+	                        mysql_connect($db_host,$db_user,$db_password);
+	                        @mysql_select_db($db_name) or die( "Unable to select database");
+        	                $query = "insert into devices (PiID, ip, devicename) VALUES ('$id', '$ip6', '$name')ON DUPLICATE KEY UPDATE devicename='$name'";
+               		        $result = mysql_query($query);
+                        	if ($debug){echo "ip/name = $ip6/$name   ";}
+                        	mysql_close();
 
-                }
+
+			}
+
+		}                
         }
 	if ($_POST[source]=="nbt"){
 		foreach(preg_split("/((\r?\n)|(\r\n?))/", $_POST[data]) as $line){
@@ -147,10 +162,6 @@ if ($valid){
         $row = mysql_fetch_row($result);
         if ($debug){echo "<br>Result : $row[0]";}
         
-
-
-
-
 
     	mysql_close();
 

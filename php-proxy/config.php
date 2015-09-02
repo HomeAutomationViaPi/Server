@@ -40,8 +40,8 @@ $config['curl'] = array(
 	// CURLOPT_CONNECTTIMEOUT => 5
 	CURLOPT_HTTPPROXYTUNNEL => 0,
 	CURLOPT_PROXY => '10.8.0.6:8118',
-	CURLOPT_FOLLOWLOCATION => 1,
-	CURLOPT_RETURNTRANSFER => 0,
+//	CURLOPT_FOLLOWLOCATION => 1,
+//	CURLOPT_RETURNTRANSFER => 0,
 );
 
 //$config['error_redirect'] = "https://unblockvideos.com/#error={error_msg}";
